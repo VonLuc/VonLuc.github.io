@@ -3,7 +3,7 @@ layout:     post
 title:      ReactiveCocoa 基础
 subtitle:   函数式编程框架 ReactiveCocoa 基础入门
 date:       2016-12-26
-author:     BY
+author:     Zhan
 header-img: img/post-bg-ios9-web.jpg
 catalog: true
 tags:
@@ -406,13 +406,13 @@ end
  `RACReplaySubject`可以先发送信号，在订阅信号，`RACSubject`就不可以。
 
  **使用场景一**:如果一个信号每被订阅一次，就需要把之前的值重复发送一遍，使用重复提供信号类。
- 
+
  **使用场景二**:可以设置capacity数量来限制缓存的value的数量,即只缓充最新的几个值。
- 
+
  **ACSubject** 和 **RACReplaySubject** 简单使用：
- 
+
  **ACSubject**
- 
+
  ```
      // RACSubject使用步骤
     // 1.创建信号 [RACSubject subject]，跟RACSiganl不一样，创建信号时没有block。
@@ -439,7 +439,7 @@ end
     NSLog(@"发送信号");
     [subject sendNext:@"1"];
  ```
- 
+
  ```
      // RACReplaySubject使用步骤:
     // 1.创建信号 [RACSubject subject]，跟RACSiganl不一样，创建信号时没有block。
@@ -608,27 +608,27 @@ end
 >RAC中用于处理事件的类，可以把事件如何处理,事件中的数据如何传递，包装到这个类中，他可以很方便的监控事件的执行过程。
 
  一、RACCommand使用步骤:
- 
+
  1. 创建命令 initWithSignalBlock:(RACSignal * (^)(id input))signalBlock
  2. 在signalBlock中，创建RACSignal，并且作为signalBlock的返回值
  3. 执行命令 - (RACSignal *)execute:(id)input
 
  二、RACCommand使用注意:
- 
+
  1. signalBlock必须要返回一个信号，不能传nil.
  2. 如果不想要传递信号，直接创建空的信号[RACSignal empty];
  3. RACCommand中信号如果数据传递完，必须调用[subscriber sendCompleted]，这时命令才会执行完毕，否则永远处于执行中。
  4. RACCommand需要被强引用，否则接收不到RACCommand中的信号，因此RACCommand中的信号是延迟发送的。
 
  三、RACCommand设计思想：
- 
+
  内部signalBlock为什么要返回一个信号，这个信号有什么用。
- 
+
  1. 在RAC开发中，通常会把网络请求封装到RACCommand，直接执行某个RACCommand就能发送请求。
  2. 当RACCommand内部请求到数据的时候，需要把请求的数据传递给外界，这时候就需要通过signalBlock返回的信号传递了。
 
  四、如何拿到RACCommand中返回信号发出的数据。
- 
+
  1. RACCommand有个执行信号源executionSignals，这个是signal of signals(信号的信号),意思是信号发出的数据是信号，不是普通的类型。
  2. 订阅executionSignals就能拿到RACCommand中返回的信号，然后订阅signalBlock返回的信号，就能获取发出的值。
 
@@ -964,7 +964,10 @@ RACMulticastConnection *connect = [signal publish];
 	```
 2016-12-28 16:53:50.746 ReactiveCacoa[4956:1246592] slider value Change：0.5
 2016-12-28 16:53:50.748 ReactiveCacoa[4956:1246592] textField change:
+	```
 ```
 
 - 使用`rac_liftSelector`时 `@selector(updateWithR1:R2:) `中的方 **参数个数** 要与 **signal个数** 相同，否则会被断言Crash！
 
+
+```

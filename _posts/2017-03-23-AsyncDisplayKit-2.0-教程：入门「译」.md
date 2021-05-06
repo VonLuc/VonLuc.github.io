@@ -3,7 +3,7 @@ layout:     post
 title:      AsyncDisplayKit 2.0 教程:入门「译」
 subtitle:   AsyncDisplayKit Tutorial:Getting Started
 date:       2017-03-23
-author:     BY
+author:     Zhan
 header-img: img/post-bg-iWatch.jpg
 catalog: true
 tags:
@@ -96,17 +96,17 @@ Objective-C。免费App排行榜前100大多数都没有使用Swift（至少6个
 首先，进入到 `AnimalTableController.m` 。在此类中添加下面代码下面代码。
 
 	#import <AsyncDisplayKit/AsyncDisplayKit.h>
-	
+
 这就导入了 ASDK 框架。
 
 然后，我们继续，替换 `tableView` 的声明属性 ：
 
 	@property  （ strong，nonatomic ） UITableView * tableView;
-	
+
 替换为 `tableNode`：
 	
 	@property  （ strong，nonatomic ） ASTableNode * tableNode;
-	
+
 这将导致这个类中很多地方报错，但不要慌张！
 
 ![](https://koenig-media.raywenderlich.com/uploads/2016/03/butBut-1-480x229.png)
@@ -131,7 +131,7 @@ Objective-C。免费App排行榜前100大多数都没有使用Swift（至少6个
 这里要注意一个有趣的情况，你调用的是 UIView 的一个 `-addSubnode:` 方法，该方法是通过 category 添加到 `UIView` 上的，等效于: 
 
 	[self.view addSubview:self.tableNode.view];
-	
+
 接下来，修改 `-viewWillLayoutSubviews` 中的代码：
 
 	- (void)viewWillLayoutSubviews {
@@ -139,7 +139,7 @@ Objective-C。免费App排行榜前100大多数都没有使用Swift（至少6个
 	 
 	  self.tableNode.frame = self.view.bounds;
 	}
-	
+
 这样就替换用 `self.tableNode` 替换了 `self.tableView`，并且设置了 table 的 Frame
 
 继续修改 `-applyStyle` 方法中的代码为：
@@ -148,7 +148,7 @@ Objective-C。免费App排行榜前100大多数都没有使用Swift（至少6个
 	  self.view.backgroundColor = [UIColor blackColor];
 	  self.tableNode.view.separatorStyle = UITableViewCellSeparatorStyleNone;
 	}
-	
+
 这是唯一设置 table 的 `separatorStyle` 的一行代码。注意 tableNode 的 view 是如何访问 table 的 `separatorStyle` 属性的。`ASTableNode` 不会暴露所有`UITableView`的的属性，所以你必须通过 tableNode 底层的 `UITableView` 实例去设置 `UITableView ` 的特殊属性。
 
 然后，在 `-initWithAnimals:` 方法中添加。
@@ -157,9 +157,9 @@ Objective-C。免费App排行榜前100大多数都没有使用Swift（至少6个
 
 并且在 **return** 之前，调用：
 
-	
+
 	[self wireDelegation];
-	
+
 这就会在初始化 `AnimalTableController` 的时候，创建了一个 tableNode 并且调用 `-wireDelegation` 方法 设置 tableNode 的 代理。
 
 #### 设置  TableNode 的 DataSource & Delegate
@@ -174,7 +174,7 @@ Objective-C。免费App排行榜前100大多数都没有使用Swift（至少6个
 	  self.tableNode.dataSource = self;
 	  self.tableNode.delegate = self;
 	}
-	
+
 现在， 你会收到警告, `AnimalTableController` 实际上不符合协议。目前，`AnimalTableController` 仅遵循 `UITableViewDataSource` 和 `UITableViewDelegate`协议。在下面的章节中，我们将遵循这些协议，使我们能够使用 tableNode 的功能。
 
 #### 遵循 ASTableDataSource
@@ -190,7 +190,7 @@ Objective-C。免费App排行榜前100大多数都没有使用Swift（至少6个
 
 	@interface AnimalTableController (DataSource)<ASTableDataSource>
 	@end
-	
+
 现在，`AnimalTableController` 已经遵循了 `AnimalTableController` 协议。本就该如此了。
 
 导航到 `AnimalTableController.m` 的底部并找到 `DataSource` category 的实现。
@@ -386,7 +386,7 @@ Build and Run，并且不停的滚呀滚。你将会看到不停的看到一只�
 回到代码`-tableNode:nodeBlockForRowAtIndexPath:`,添加一句注释
 
 	//You'll add something extra here later...
-	
+
 在它的下面，给 `cardNode` 添加一个 `debugName`：
 
 ```objc

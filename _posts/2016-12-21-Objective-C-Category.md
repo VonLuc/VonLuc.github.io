@@ -3,7 +3,7 @@ layout:     post
 title:      Objective-C：Category
 subtitle:   深入解析 Category 的实现原理
 date:       2016-12-21
-author:     BY
+author:     Zhan
 header-img: img/post-bg-ios9-web.jpg
 catalog: true
 tags:
@@ -15,12 +15,12 @@ tags:
 >本文转载自美图点评技术团队的：[深入理解Objective-C：Category](http://tech.meituan.com/DiveIntoCategory.html)，略有修改。
 
 # 前言
- 
+
 
 无论一个类设计的多么完美，在未来的需求演进中，都有可能会碰到一些无法预测的情况。那怎么扩展已有的类呢？一般而言，继承和组合是不错的选择。但是在Objective-C 2.0中，又提供了category这个语言特性，可以动态地为已有类添加新行为。如今category已经遍布于Objective-C代码的各个角落，从Apple官方的framework到各个开源框架，从功能繁复的大型APP到简单的应用，catagory无处不在。本文对category做了比较全面的整理，希望对读者有所裨益。
 
 # 简介
- 
+
 本文系学习Objective-C的runtime源码时整理所成，主要剖析了category在runtime层的实现原理以及和category相关的方方面面，内容包括：
 
 - 初入宝地 category简介
@@ -32,7 +32,7 @@ tags:
 - 更上一层 category和关联对象
 
 ## 初入宝地 Category简介
- 
+
 Category是Objective-C 2.0之后添加的语言特性，Category的主要作用是为已经存在的类添加方法。除此之外，apple还推荐了Category的另外两个使用场景,详见[Apple Category文档](https://developer.apple.com/library/content/documentation/General/Conceptual/DevPedia-CocoaCore/Category.html)。
 
 - 可以把类的实现分开在几个不同的文件里面。这样做有几个显而易见的好处，
@@ -49,11 +49,11 @@ Category是Objective-C 2.0之后添加的语言特性，Category的主要作用�
 Objective-C的这个语言特性对于纯动态语言来说可能不算什么，比如javascript，你可以随时为一个“类”或者对象添加任意方法和实例变量。但是对于不是那么“动态”的语言而言，这确实是一个了不起的特性。
 
 ## 连类比事 Category和Extension
- 
+
 extension看起来很像一个匿名的category，但是extension和有名字的category几乎完全是两个东西。 extension在编译期决议，它就是类的一部分，在编译期和头文件里的@interface以及实现文件里的@implement一起形成一个完整的类，它伴随类的产生而产生，亦随之一起消亡。extension一般用来隐藏类的私有信息，你必须有一个类的源码才能为一个类添加extension，所以你无法为系统的类比如NSString添加extension。(详见[Apple文档](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/CustomizingExistingClasses/CustomizingExistingClasses.html))
 
 ## 挑灯细览 category真面目
- 
+
 我们知道，所有的OC类和对象，在runtime层都是用struct表示的，category也不例外，在runtime层，category用结构体category_t（在objc-runtime-new.h中可以找到此定义），它包含了
 
 1. 类的名字（name）

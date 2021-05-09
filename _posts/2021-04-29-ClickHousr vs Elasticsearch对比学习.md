@@ -54,11 +54,11 @@ DDL任务：
 
 ​	前述可知，Lucene索引并没有写入实时可见的能力，因此E为近实时（NearRealTime）系统。每隔一段比较长的时间，Lucene会把内存中生成的新Segment刷新到磁盘上，刷新后索引文件已经持久化了，历史的TransLog就没用了，才会清空掉旧的TransLog。
 
-![avatar](E:\zhan\blog\VonLuc.github.io\img\structure\post-elasticsearch-1.jpg)
+![avatar](..\img\structure\post-elasticsearch-1.jpg)
 
 ​	与E的写入链路相比，C的方式更直接、极致，所有数据写入时直接落盘，同时省略了传统的写redo日志阶段。在极高写入吞吐要求场景下，E和C都需要为提升吞吐舍弃部分写入实时可见性。C主推的做法是把数据延迟攒批写入交给客户端来实现。另外在多副本同步上，E要求的是实时同步，即写入请求必须写穿多个副本才能返回，而C依赖于zk做异步的磁盘文件同步(datashipping),实战中C的写入吞吐能力远超同规格的E。
 
-![avatar](E:\zhan\blog\VonLuc.github.io\img\structure\elasticsearch-2.jpg)
+![avatar](..\img\structure\elasticsearch-2.jpg)
 
 #### Segment vs DataPart
 

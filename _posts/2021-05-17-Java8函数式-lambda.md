@@ -71,3 +71,30 @@ button.addActionListener(new ActionListener() {
 
 ### 如何识别Lambda
 
+```java
+ /**
+  * 不包含参数，使用空括号表示没参数，该Lambda表达式实现了runnable接口,接口返回类型为void
+  * */
+Runnable noArguments = () -> System.out.println("hello world");
+/**
+ * lambda只有一个参数时，可以省略参数括号
+ * lambda的主体不仅可以是表达式，也可以是代码块，使用{}括起来
+ * */
+ActionListener oneArgument = event -> System.out.println("button clicked");
+/**
+ * 可以用返回和抛出异常退出
+ * */
+Runnable multiStatement = () -> {
+    System.out.println("hello");
+    System.out.println("world");
+};
+/**
+ * 变量 add 的类型是 BinaryOperator<Long>，它不是两个数字的和， 而是将两个数字相加的那行代码
+ * */
+BinaryOperator<Long> add = (x, y) -> x + y;
+/**
+ * Lambda 表达式的类型依赖于上下文环境，是由编译器 推断出来的
+ * */
+BinaryOperator<Long> addExplicit = (Long x, Long y) -> x + y;
+```
+

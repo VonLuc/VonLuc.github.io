@@ -120,12 +120,45 @@ public interface ActionListener  extends EventListener {
 
 常用java开发工具包JDK提供的核心函数接口:
 
-| 接口         | 参数 | 返回类型 | 示例 |
-| ------------ | ---- | -------- | ---- |
-| Predicate<T> |      |          |      |
-| Consumer<T>  |      |          |      |
-|              |      |          |      |
-|              |      |          |      |
-|              |      |          |      |
-|              |      |          |      |
+| 接口              | 参数   | 返回类型 | 示例                 |
+| ----------------- | ------ | -------- | -------------------- |
+| Predicate<T>      | T      | boolean  | 这张唱片已经发行了吗 |
+| Consumer<T>       | T      | void     | 输出一个值           |
+| Function<T>       | T      | R        | 获得Artist对象的名字 |
+| Supplier<T>       | None   | T        | 工厂方法             |
+| UnaryOperator<T>  | T      | T        | 逻辑非(!)            |
+| BinaryOperator<T> | (T, T) | T        | 求两个数的乘积(*)    |
+
+### 类型推断
+
+​	Lambda表达式中的类型推断，实际上是java7就引入的目标类型推断的扩展，如java7中的菱形操作符，可以让java推断出参数的类型；javac 根据 Lambda 表达式上下文信息就能推断出参数的正确类型。程序依然要经过类型检查来保证运行的安全性，但不用再显式声明类型罢了，这就是所谓的类型推断。Java 8 中对类型推断系统的改善值得一提。上面的例子将 new HashMap<>()传给 useHashmap 方法，即使编译器拥有足够的信息，也无法在 Java 7 中通过编译；
+
+#### 类型推断实例
+
+```java
+/**
+ * Predicate为Lambda表达式,会返回一个值, x>5是lambda表达式的主体实现了Predicate接口，所以Predicate返回的就是表达式主体x>5的值
+ * */
+Predicate<Integer> atLeast5 = x -> x > 5;
+```
+
+```java
+/**
+ * BinaryOperator接受两个参数，返回一个与参数类型相同的值;
+ * */
+BinaryOperator<Long> addLongs = (x, y) -> x+y;
+/**
+ * 类型推断系统相当智能，但若信息不够，类型推断系统也无能为力。类型系统不会漫无边 际地瞎猜，而会中止操作并报告编译错误，寻求帮助
+ * 编译器给出的报错信息如下： Operator '& #x002B;' cannot be applied to java.lang.Object,java.lang.Object.BinaryOperator 毕竟是一个具有泛型参数的函数 接口，该类型既是参数 x 和 y 的类型，也是返回值的类型。上面的例子中并没有给出变量 add 的任何泛型信息，给出的正是原始类型的定义。因此，编译器认为参数和返回值都是 java.lang.Object 实例。
+ * */
+BinaryOperator<> add = (x, y) -> x+y;
+```
+
+### 要点：
+
+​	`*·Lambda 表达式是一个匿名方法，将行为像数据一样进行传递；*`
+
+​	`*·Lambda 表达式的常见结构：BinaryOperator<Integer> add = (x, y) → x + y；*`
+
+​	`*·函数接口指仅具有单个抽象方法的接口，用来表示Lambda表达式的类型;*`
 

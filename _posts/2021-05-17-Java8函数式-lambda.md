@@ -104,5 +104,16 @@ BinaryOperator<Long> addExplicit = (Long x, Long y) -> x + y;
 
 ### 函数接口
 
-​	函数接口是只有一个抽象方法的接口，用作 Lambda 表达式的类型。
-
+```java
+/**
+ * ActionListener接口:接受ActionEvent类型参数，返回空;该接口也继承自一个不具有任何方法的父接口：EventListener;
+ * ActionListener只有一个抽象方法：actionPerformed,表示的行为:接受一个参数，返回空;
+ * 由于actionPerformed定义在一个接口里，因此abstract关键字不是必须的;
+ * 该接口为函数式接口，接口中单一方法的命名并不重要，只要方法签名和Lambda表达是的类型匹配即可，可在函数接口中为参数起一个有意义的名字，增加易读性。
+ * 
+ *
+ * */
+public interface ActionListener  extends EventListener {
+    public void actionPerformed(ActionEvent event);
+}
+```

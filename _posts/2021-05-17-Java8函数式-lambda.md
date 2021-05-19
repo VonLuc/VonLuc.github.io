@@ -117,3 +117,15 @@ public interface ActionListener  extends EventListener {
     public void actionPerformed(ActionEvent event);
 }
 ```
+
+常用java开发工具包JDK提供的核心函数接口:
+
+| 接口         | 参数 | 返回类型 | 示例 |
+| ------------ | ---- | -------- | ---- |
+| Predicate<T> |      |          |      |
+| Consumer<T>  |      |          |      |
+|              |      |          |      |
+|              |      |          |      |
+|              |      |          |      |
+|              |      |          |      |
+

@@ -50,15 +50,47 @@ possible.get();
 
 Optional无意直接模拟其他编程环境中的”可选” or “可能”语义，但它们的确有相似之处。
 
-Optional常用操作：
+#### Optional常用操作：
 
-创建optional实例(静态方法)
+##### 创建optional实例(静态方法)
+
+| Optional.of(T)           | 创建指定引用的optional实例，若引用为null则快速失败 |
+| ------------------------ | -------------------------------------------------- |
+| Optional.absent()        | 创建引用缺失的optional实例                         |
+| Optional.fromNullable(T) | 创建指定引用的optional实例，若引用为null则表示失败 |
+
+##### 用optional实例查询引用(非静态方法)
+
+| boolean isPresent() | 如果optional包含非null的引用（引用存在)，返回true            |
+| ------------------- | ------------------------------------------------------------ |
+| T get()             | 返回optional所包含的引用，若引用缺失，则抛java.lang.IllegalStateException |
+| T or(T)             | 返回optinal所包含的引用，若引用缺失，返回指定的值            |
+| T orNull()          | 返回optional所包含的引用，若引用缺失，返回null               |
+| Set<T> asSet()      | 返回optional所包含引用的单例不可变集，如果引用存在，返回一个只有单一元素的集合，如果引用缺失，返回一个空集合 |
+
+#### 使用optional意义
+
+​		使用Optional除了赋予null语义，增加了可读性，最大的优点在于它是一种傻瓜式的防护，使开发者思考引用缺失的情况，因此必须显式的从optional获取引用。
+
+​		如同输入参数，方法的返回值也可能是null，将方法的返回类型指定为optional，可迫使调用者思考返回的引用缺失的情形；
+
+#### 其他处理null的便利方法
+
+​		当需要用一个默认值替代可能的null，使用objects.firstNonNull(T,T)方法，如同两个值都为null，该方法跑出npe，optional也是一个比较好的替代方案，如optional.of(first).or(second)
+
+​		还有一些其他专门处理null或空字符串的方法(主要用来与混淆null/空的api交互)：
+
+​		emptyToNull(String)
+
+​		nullToEmpty(String)
+
+​		isNullOrEmpty(String)
 
 
 
-用optional实例查询引用(非静态方法)
+### 建议
 
-
+积极把null和空区分开，以表示不同含义；
 
 ## 前置条件
 

@@ -11,7 +11,7 @@ github_repo: "https://github.com/VonLuc/VonLuc.github.io.git" # you code reposit
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "苦练基本功"
+sidebar-about-description: "LeiZhenZi198708"
 sidebar-avatar: /img/WechatIMG645.jpeg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 

@@ -86,14 +86,6 @@ Optional无意直接模拟其他编程环境中的”可选” or “可能”�
 
 ​		isNullOrEmpty(String)
 
-
-
-
-
-
-
-
-
 ### 建议
 
 积极把null和空区分开，以表示不同含义；

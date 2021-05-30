@@ -100,7 +100,7 @@ Optional无意直接模拟其他编程环境中的”可选” or “可能”�
 
 ​	·有一个string作为额外参数，并且有一组任意数量的附加object对象：这个变种处理异常消息类似printf，但考虑gwt的兼容性和效率，只支持%s指示符；
 
-
+checkArgument
 
 ## 常用object方法
 

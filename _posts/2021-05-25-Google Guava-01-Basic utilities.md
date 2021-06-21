@@ -18,9 +18,7 @@ guava api链接地址:http://docs.guava-libraries.googlecode.com/git-history/rel
 
 ## 使用和避免null
 
-*[@_@]: dddddd
-
-
+*[@_@]: ddddddadasdasdasdas 
 
 ​	null在开发过程中会引发很多让人意外的问题，通过查看底层源码库，我们发现将近95%的集合类不接受null作为元素，因此我们认为，相比默默接受null，使用快速失败操作拒绝null对开发者更有帮助。
 

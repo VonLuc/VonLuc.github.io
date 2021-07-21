@@ -129,9 +129,57 @@ checkArgument(i<j, "Expected i < j, but s% > s%", i, j);
 
 ## hashCode
 
+guava的objects.hashcode（object...）会对传入的字段序列计算出合理的、顺序敏感的散列值，可以使用objects.hashcode(field1, field2, ... , fieldn)来代替手工计算散列值；
+
+## toString
+
+Objects.toStringHelper:
+
+//Returns "ClassName{x=1}"
+
+Objects.toStringHelper(this).add("x",1).toString();
 
 
 
+## compare/compareTo
+
+旧版本使用比较器：实现comparator或实现comparable接口，比较繁琐，如：
+
+class person implements Comparable<Person>{
+
+​	private Srting lastName;
+
+​	private Srting firstName;	
+
+​	private int zipCode;
+
+public int compareTo(Person other){
+
+​	int cmp = lastName.compareTo(other.lastName);
+
+​	if(cmp != 0)
+
+​		return cmp;
+
+​    cmp = firstName.compareTo(other.firstName);
+
+​	if(cmp != 0)
+
+​		return cpm;
+
+​	return Integer.compare(zipCode, other.zipCode);
+
+ }
+
+}
+
+该用guava提供地ComparisonChain,它执行一种懒比较，执行比较操作直至发现非零的结果，在那之后的比较输入将被忽略
+
+public int compareTo(Foo that) {
+
+​	return ComparisonChain.start().compare(this.aString, that.aString).compare(this.anInt, that.anInt).compare(this.anEnum, that.anEnum,Ordering.natural().nullsLast()).result();
+
+}
 
 ## 排序：guava强大的流畅风格比较器
 

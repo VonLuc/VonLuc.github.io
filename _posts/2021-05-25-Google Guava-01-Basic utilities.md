@@ -306,8 +306,7 @@ Throwables.propagate的有争议用法：
 
 异常原因链：
 
-Throwable   getRootCause(Throwable)
-
-List<Throwable>   getCausalChain(Throwable)
-
-String   getStackTraceAsString(Throwable)
+| Throwable   getRootCause(Throwable)         |
+| ------------------------------------------- |
+| List<Throwable>   getCausalChain(Throwable) |
+| String   getStackTraceAsString(Throwable)   |

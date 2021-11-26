@@ -181,9 +181,131 @@ public int compareTo(Foo that) {
 
 }
 
-## 排序：guava强大的流畅风格比较器
+## 排序：guava强大的流畅风格比较器-Ordering
+
+​	ordering实际为Comparator的特殊实例，把很多基于comparator的静态方法包装为自己的实例方法但非静态方法，且提供了链式调用方法，来定制和增强现有的比较器。
+
+创建排序器:
+
+​	natrual()：对可排序类型做自然排序，数字按大笑，日期按先后
+
+​	usingToString()：按对象的字符串形式，做字典排序lexicographical ordering
+
+​	from(Comparator)：把给定的comparator转化为排序器，为了实现自定义排序器，也可以不是用from，直接继承ordering
+
+​		Ordering<String> byLengthOrdering = new Ordering<String>{
+
+​				public int compare(String left，String right) {
+
+​					return Ints.compare(left.length(), right.length());
+
+​				}
+
+​		};
+
+排序器ordering的链式调用：
+
+​	reverse()：获取语意相反的排序器
+
+​	nullFirst(): 使用当前排序器，但额外把null值排到最前面
+
+​	nullLast(): 使用当前排序器，但额外把null值排到最后面
+
+​	compound(Comparator): 合成另一个比较器，以处理当前排序器中的相等情况
+
+​	lexicographical():基于处理类型T的排序器，返回该类型的可迭代对象Iterable<T>的排序器
+
+​	onResultOf(Function):对集合中元素调用Function，再按返回值用当前排序器排序
+
+​	示例:
+
+​		需要排序器的类：
+
+​			class Foo{
+
+​				@Nullable String sortedBy;
+
+​				int noSortedBy;
+
+​			}
+
+​         使用下面的链式调用来合成排序器:阅读链式调用产生的排序器时，应该从后往前读,排序器首先调用apply方法获取sortedBy值，并把sortedBy为null的元素都放到最前面，然后把剩下的元素按sortedBy进行自然排序,从后往前读，是因为每次链式调用都是用后面的方法包装了前面的排序器,在使用compound方法时，不应遵循从后往前读的规则，需要注意这点，为了避免混淆，请不要在一长串链式调用中间使用compound，可以另起一行，在链中最先或最后调用。
+
+​         Ordering<Foo> ordering = Ordering.natural().nullFirst().OnResultOf(new Function<Foo, String>){
+
+​				public String apply(Foo foo) {
+
+​						return foo.sortedBy;
+
+​                }
+
+​         });
+
+运用排序器：Guava的排序器实现有若干操纵集合或元素值的方法
+
+​	greatestOf(Itrable iterable, int k)：获取可迭代对象中最大的k个元素。
+
+​	isOrdered(Iterable)：判断可迭代对象是否已按排序器排序：允许有排序值相等的元素
+
+​	sortedCopy(Iterable)：判断可迭代对象是否已严格按排序器排序：不允许排序值相等的元素
+
+​	min(E,E)：返回两个参数中最小的那个。如果相等，则返回第一个参数
+
+​	min(E,E,E,E,E...)：返回多个参数中最小的那个。如果有超过一个参数都最小，则返回第一个最小的参数
+
+​	min(Iterable): 返回迭代器中最小的元素。如果可迭代对象中没有元素，则抛出NoSuchElementException
 
 ## Throwables:简化异常和错误的传播与检查
 
+异常传播：
 
+把捕获到的异常再次抛出，这种情况通常发生在Error或RuntimeException被捕获的时候，开发时没想捕获它们，但是声明捕获Throwable和Exception的时候，也包括了了Error或RuntimeException，Guava提供了若干方法，来判断异常类型并且重新传播异常：
 
+try {
+    someMethodThatCouldThrowAnything();
+} catch (IKnowWhatToDoWithThisException e) {
+    handle(e);
+} catch (Throwable t) {
+    Throwables.propagateIfInstanceOf(t, IOException.class);
+    Throwables.propagateIfInstanceOf(t, SQLException.class);
+    throw Throwables.propagate(t);
+}
+
+​	所有这些方法都会自己决定是否要抛出异常，但也能直接抛出方法返回的结果——例如，throw Throwables.propagate(t);—— 这样可以向编译器声明这里一定会抛出异常
+
+Guava中异常传播方法简要列举：
+
+RuntimeException propagate(Throwable)：如果Throwable是Error或RuntimeException，直接抛出；否则把Throwable包装成RuntimeException抛出，返回类型是RuntimeException。
+
+void propagateIfInstanceOf( Throwable, Class<X extends   Exception>) throws X: Throwable类型为X才抛出。
+
+void propagateIfPossible( Throwable)：Throwable类型为Error或RuntimeException才抛出。
+
+void   propagateIfPossible( Throwable, Class<X extends Throwable>) throws X：Throwable类型为X, Error或RuntimeException抛出
+
+## Throwables.propagate的用法
+
+​	通常来说，如果调用者想让异常传播到栈顶，他不需要写任何catch代码块。因为他不打算从异常中恢复，他可能就不应该记录异常，或者有其他的动作。他可能是想做一些清理工作，但通常来说，无论操作是否成功，清理工作都要进行，所以清理工作可能会放在finallly代码块中。但有时候，捕获异常然后再抛出也是有用的：也许调用者想要在异常传播之前统计失败的次数，或者有条件地传播异常
+
+Java7用多重捕获解决了多种异常需要处理的问题：
+
+...
+
+} catch (RuntimeException | Error e) {
+    failures.increment();
+    throw e;
+}
+
+Throwables.propagate的有争议用法：
+
+争议一：把受检异常转化为非受检异常
+
+争议二：异常穿隧
+
+争议三：重新抛出其他线程产生的异常
+
+异常原因链：
+
+Throwable   getRootCause(Throwable)
+List<Throwable>   getCausalChain(Throwable)
+String   getStackTraceAsString(Throwable)

@@ -1,17 +1,17 @@
 # Site settings
 title: Zhan's Blog
-SEOTitle: Zhan's Blog
+SEOTitle: LeiZhenZi's Blog
 header-img: img/post-bg-desk.jpg
-email: arthurlivesforest@126.com | 公众号:阴山雷震子
+email: arthurlivesforest@126.com     | 公众号:阴山雷震子
 description: "Every failure is leading towards success."
-keyword: "LeiZhenZi, LeiZhenZi198708 Blog, 雷震子的博客, 雷震子, Flutter 2.0, Apple, 历史版本iPhone个性化设置"
+keyword: "LeiZhenZi, LeiZhenZi Blog, 阴山雷震子的博客, 阴山雷震子, Flutter 2.0, Apple, 历史版本iPhone个性化设置"
 url: "http:// VonLuc.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
 github_repo: "https://github.com/VonLuc/VonLuc.github.io.git" # you code repository
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "LeiZhenZi198708"
+sidebar-about-description: "LeiZhenZi"
 sidebar-avatar: /img/WechatIMG645.jpeg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
